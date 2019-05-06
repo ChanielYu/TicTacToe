@@ -9,19 +9,21 @@
 /* Begin PBXBuildFile section */
 		FAE5D37222804583007B8940 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE5D37122804583007B8940 /* AppDelegate.swift */; };
 		FAE5D37422804583007B8940 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE5D37322804583007B8940 /* ViewController.swift */; };
-		FAE5D37722804583007B8940 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAE5D37522804583007B8940 /* Main.storyboard */; };
 		FAE5D37922804584007B8940 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FAE5D37822804584007B8940 /* Assets.xcassets */; };
-		FAE5D37C22804584007B8940 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAE5D37A22804584007B8940 /* LaunchScreen.storyboard */; };
+		FAE5D38722804D6D007B8940 /* GameBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE5D38622804D6D007B8940 /* GameBoardView.swift */; };
+		FAE5D38922804DE6007B8940 /* GameBoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE5D38822804DE6007B8940 /* GameBoardViewController.swift */; };
+		FAE5D38E22819D66007B8940 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAE5D38D22819D66007B8940 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		FAE5D36E22804583007B8940 /* TicTacToe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TicTacToe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAE5D37122804583007B8940 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FAE5D37322804583007B8940 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		FAE5D37622804583007B8940 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		FAE5D37822804584007B8940 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		FAE5D37B22804584007B8940 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FAE5D37D22804584007B8940 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FAE5D38622804D6D007B8940 /* GameBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameBoardView.swift; sourceTree = "<group>"; };
+		FAE5D38822804DE6007B8940 /* GameBoardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameBoardViewController.swift; sourceTree = "<group>"; };
+		FAE5D38D22819D66007B8940 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,14 +56,31 @@
 		FAE5D37022804583007B8940 /* TicTacToe */ = {
 			isa = PBXGroup;
 			children = (
+				FAE5D38A22804DEC007B8940 /* Controller */,
+				FAE5D38322804CEF007B8940 /* View */,
 				FAE5D37122804583007B8940 /* AppDelegate.swift */,
 				FAE5D37322804583007B8940 /* ViewController.swift */,
-				FAE5D37522804583007B8940 /* Main.storyboard */,
 				FAE5D37822804584007B8940 /* Assets.xcassets */,
-				FAE5D37A22804584007B8940 /* LaunchScreen.storyboard */,
 				FAE5D37D22804584007B8940 /* Info.plist */,
+				FAE5D38D22819D66007B8940 /* LaunchScreen.storyboard */,
 			);
 			path = TicTacToe;
+			sourceTree = "<group>";
+		};
+		FAE5D38322804CEF007B8940 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				FAE5D38622804D6D007B8940 /* GameBoardView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		FAE5D38A22804DEC007B8940 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				FAE5D38822804DE6007B8940 /* GameBoardViewController.swift */,
+			);
+			path = Controller;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -122,9 +141,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FAE5D37C22804584007B8940 /* LaunchScreen.storyboard in Resources */,
+				FAE5D38E22819D66007B8940 /* LaunchScreen.storyboard in Resources */,
 				FAE5D37922804584007B8940 /* Assets.xcassets in Resources */,
-				FAE5D37722804583007B8940 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -136,30 +154,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				FAE5D37422804583007B8940 /* ViewController.swift in Sources */,
+				FAE5D38922804DE6007B8940 /* GameBoardViewController.swift in Sources */,
 				FAE5D37222804583007B8940 /* AppDelegate.swift in Sources */,
+				FAE5D38722804D6D007B8940 /* GameBoardView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		FAE5D37522804583007B8940 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				FAE5D37622804583007B8940 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		FAE5D37A22804584007B8940 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				FAE5D37B22804584007B8940 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		FAE5D37E22804584007B8940 /* Debug */ = {

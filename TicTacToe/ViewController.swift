@@ -13,13 +13,9 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        /*let square = min(view.bounds.width, view.bounds.height)
+        let square = min(view.bounds.width, view.bounds.height)
         let gameView = GameBoardView(frame: CGRect(x: 0, y: view.bounds.height / 2 - square / 2, width: square, height: square))
-        view.addSubview(gameView)*/
-        let gameController = GameBoardViewController(nibName: nil, bundle: nil)
-        addChild(gameController)
-        view.addSubview(gameController.view)
-        //gameController.didMove(toParent: self)
+        view.addSubview(gameView)
         view.backgroundColor = UIColor.white
     }
 

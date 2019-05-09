@@ -21,10 +21,10 @@ class GameViewModel {
         chessSize = CGSize(width: boardSize.width/CGFloat(matrixSize), height: boardSize.height/CGFloat(matrixSize))
         inset = min(boardSize.width, boardSize.height)/CGFloat(matrixSize)/CGFloat(8)
         let len = GameBoardView.MATRIX_SIZE-1
-        for rowInx in 0...len {
+        for colInx in 0...len {
             var row = Array<CGRect>()
             for rectInx in 0...len {
-                row.append(CGRect(origin: CGPoint(x: chessSize.width*CGFloat(rectInx),y: chessSize.height*CGFloat(rowInx)), size: CGSize(width: chessSize.width,height: chessSize.height)).insetBy(dx: inset, dy: inset))
+                row.append(CGRect(origin: CGPoint(x: chessSize.width*CGFloat(rectInx),y: chessSize.height*CGFloat(colInx)), size: CGSize(width: chessSize.width,height: chessSize.height)).insetBy(dx: inset, dy: inset))
             }
             chessMatrix.append(row)
         }
@@ -32,21 +32,20 @@ class GameViewModel {
 
     func tapHandler(location: CGPoint) {
         root:
-        for (x, row) in chessMatrix.enumerated() {
-            for (y, rect) in row.enumerated() {
-                if rect.contains(location) && boardMatrix[x][y]==0 {
+        for (y, row) in chessMatrix.enumerated() {
+            for (x, rect) in row.enumerated() {
+                if rect.contains(location) && boardMatrix[y][x]==0 {
                     if playerCircle {
-                        boardMatrix[x][y] = 1
+                        boardMatrix[y][x] = 1
                         playerCircle = false
                     } else {
-                        boardMatrix[x][y] = 2
+                        boardMatrix[y][x] = 2
                         playerCircle = true
                     }
-                    print(x,y)
+                    gameBoardDelegate.onGameBoardChange(chessBoard: boardMatrix)
                     break root
                 }
             }
         }
-        gameBoardDelegate.onGameBoardChange(chessBoard: boardMatrix)
     }
 }

@@ -34,8 +34,17 @@ class GameBoardView: UIView {
         context?.setFillColor(backGroudColor.cgColor)
         context?.fill(rect)
         drawBoard(context: context, rect: rect)
-        drawCircle(context: context, rect: CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: chessRectWidth - getBoardLineWidth(rect: rect), height: chessRectHeight - getBoardLineWidth(rect: rect))))
-        drawCross(context: context, rect: CGRect(origin: CGPoint(x: chessRectWidth, y: chessRectHeight), size: CGSize(width: chessRectWidth - getBoardLineWidth(rect: rect), height: chessRectHeight - getBoardLineWidth(rect: rect))))
+        for (y, row) in boardMatrix.enumerated() {
+            for (x, chess) in row.enumerated() {
+                if (chess == 1) {
+                    drawCircle(context: context, rect: CGRect(origin: CGPoint(x: chessRectWidth*CGFloat(x), y: chessRectHeight*CGFloat(y)), size: CGSize(width: chessRectWidth - getBoardLineWidth(rect: rect), height: chessRectHeight - getBoardLineWidth(rect: rect))))
+                } else if (chess == 2) {
+                    drawCross(context: context, rect: CGRect(origin: CGPoint(x: chessRectWidth*CGFloat(x), y: chessRectHeight*CGFloat(y)), size: CGSize(width: chessRectWidth - getBoardLineWidth(rect: rect), height: chessRectHeight - getBoardLineWidth(rect: rect))))
+                } else {
+                    // clear
+                }
+            }
+        }
         context?.restoreGState()
     }
 
@@ -84,10 +93,10 @@ class GameBoardView: UIView {
 
     func updateGameBoard(chessBoard: Array<Array<Int>>) {
         if chessBoard.count == GameBoardView.MATRIX_SIZE {
-            for (rowIdx, row) in chessBoard.enumerated() {
+            for (colIdx, row) in chessBoard.enumerated() {
                 if row.count == GameBoardView.MATRIX_SIZE {
                     for (index, chess) in row.enumerated() {
-                        boardMatrix[rowIdx][index] = chess
+                        boardMatrix[colIdx][index] = chess
                     }
                 }
             }

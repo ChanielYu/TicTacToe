@@ -38,5 +38,8 @@ class ViewController: UIViewController, GameViewModelDelegate {
     func onGameBoardChange(chessBoard: Array<Array<Int>>) {
         gameView.updateGameBoard(chessBoard: chessBoard)
     }
+    func gotWinner(mode: Int, x: Int, y: Int) {
+        gameView.updateWinner(mode: mode, x: x, y: y)
+    }
 }
 

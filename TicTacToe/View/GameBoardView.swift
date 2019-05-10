@@ -15,6 +15,10 @@ class GameBoardView: UIView {
     private let foreGroudColor = UIColor.white
     private var boardMatrix = Array(repeating: Array(repeating: 0, count: MATRIX_SIZE), count: MATRIX_SIZE)
 
+    private var mode = -1
+    private var startX = 0
+    private var startY = 0
+
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
@@ -27,6 +31,7 @@ class GameBoardView: UIView {
 
     override func draw(_ rect: CGRect) {
         super.draw(rect)
+        let offset = getBoardLineWidth(rect: rect)
         let chessRectWidth = rect.width/3
         let chessRectHeight = rect.height/3
         let context = UIGraphicsGetCurrentContext()
@@ -37,14 +42,33 @@ class GameBoardView: UIView {
         for (y, row) in boardMatrix.enumerated() {
             for (x, chess) in row.enumerated() {
                 if (chess == 1) {
-                    drawCircle(context: context, rect: CGRect(origin: CGPoint(x: chessRectWidth*CGFloat(x), y: chessRectHeight*CGFloat(y)), size: CGSize(width: chessRectWidth - getBoardLineWidth(rect: rect), height: chessRectHeight - getBoardLineWidth(rect: rect))))
+                    drawCircle(context: context, rect: CGRect(origin: CGPoint(x: chessRectWidth*CGFloat(x), y: chessRectHeight*CGFloat(y)), size: CGSize(width: chessRectWidth - offset, height: chessRectHeight - offset)))
                 } else if (chess == 2) {
-                    drawCross(context: context, rect: CGRect(origin: CGPoint(x: chessRectWidth*CGFloat(x), y: chessRectHeight*CGFloat(y)), size: CGSize(width: chessRectWidth - getBoardLineWidth(rect: rect), height: chessRectHeight - getBoardLineWidth(rect: rect))))
+                    drawCross(context: context, rect: CGRect(origin: CGPoint(x: chessRectWidth*CGFloat(x), y: chessRectHeight*CGFloat(y)), size: CGSize(width: chessRectWidth - offset, height: chessRectHeight - offset)))
                 } else {
                     // clear
                 }
             }
         }
+        context?.setStrokeColor(foreGroudColor.cgColor)
+        context?.setLineWidth(getBoardLineWidth(rect: rect))
+        switch mode {
+        case 0:
+            break
+        case 1:
+            break
+        case 2:
+            context?.move(to: CGPoint(x: rect.minX, y: rect.minY))
+            context?.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
+            break
+        case 3:
+            context?.move(to: CGPoint(x: rect.minX, y: rect.maxY - offset))
+            context?.addLine(to: CGPoint(x: rect.maxX, y: rect.minY - offset))
+            break
+        default:
+            break
+        }
+        context?.strokePath()
         context?.restoreGState()
     }
 
@@ -101,6 +125,13 @@ class GameBoardView: UIView {
                 }
             }
         }
+        setNeedsDisplay()
+    }
+
+    func updateWinner(mode: Int, x: Int, y: Int) {
+        self.mode = mode
+        startX = x
+        startY = y
         setNeedsDisplay()
     }
 }

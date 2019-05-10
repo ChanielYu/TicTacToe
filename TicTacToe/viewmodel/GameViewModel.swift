@@ -17,7 +17,8 @@ class GameViewModel {
     private let gameBoardDelegate: GameViewModelDelegate
     private var playerCircle = true
     private var winner = 0
-    private var startPos = 0
+    private var startPosX = 0
+    private var startPosY = 0
     private var winningMode = 0 // 0->horizontal 1->vertical 2->slash 3->reverse slash
     private var round = 0
 
@@ -42,7 +43,8 @@ class GameViewModel {
         let row = boardMatrix[y]
         var result = checkWinner(candidate: row)
         winner = result[0]
-        startPos = result[1]
+        startPosX = result[1]
+        startPosY = y
         winningMode = 0
         if winner != 0 {
             return
@@ -56,7 +58,8 @@ class GameViewModel {
         }
         result = checkWinner(candidate: candidate)
         winner = result[0]
-        startPos = result[1]
+        startPosX = x
+        startPosY = result[1]
         winningMode = 1
         if winner != 0 {
             return
@@ -71,7 +74,8 @@ class GameViewModel {
         }
         result = checkWinner(candidate: candidate)
         winner = result[0]
-        startPos = result[1]
+        startPosX = result[1]
+        startPosY = result[1]
         winningMode = 2
         if winner != 0 {
             return
@@ -82,7 +86,8 @@ class GameViewModel {
         }
         result = checkWinner(candidate: candidate)
         winner = result[0]
-        startPos = result[1]
+        startPosX = result[1]
+        startPosY = result[1]
         winningMode = 3
     }
 
@@ -131,16 +136,27 @@ class GameViewModel {
     }
 
     private func mayGotWinner() {
-        if winner != 0 || round >= GameBoardView.MATRIX_SIZE*GameBoardView.MATRIX_SIZE {
+        if winner != 0 {
+            gameBoardDelegate.gotWinner(mode: winningMode, x: startPosX, y: startPosY)
+        } else if round >= GameBoardView.MATRIX_SIZE*GameBoardView.MATRIX_SIZE {
             boardMatrix = Array(repeating: Array(repeating: 0, count: GameBoardView.MATRIX_SIZE), count: GameBoardView.MATRIX_SIZE)
             gameBoardDelegate.onGameBoardChange(chessBoard: boardMatrix)
             round = 0
-            print(winner, startPos, winningMode)
+            print(winner, startPosX, startPosY, winningMode)
         }
-        winner = 0
+        //winner = 0
     }
 
     func tapHandler(location: CGPoint) {
+        if winner != 0 {
+            winner = 0
+            boardMatrix = Array(repeating: Array(repeating: 0, count: GameBoardView.MATRIX_SIZE), count: GameBoardView.MATRIX_SIZE)
+            gameBoardDelegate.onGameBoardChange(chessBoard: boardMatrix)
+            round = 0
+            gameBoardDelegate.gotWinner(mode: -1, x: startPosX, y: startPosY)
+            print(winner, startPosX, startPosY, winningMode)
+            return
+        }
         root:
         for (y, row) in chessMatrix.enumerated() {
             for (x, rect) in row.enumerated() {

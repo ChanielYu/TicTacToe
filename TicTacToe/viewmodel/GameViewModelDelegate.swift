@@ -10,4 +10,5 @@ import Foundation
 
 protocol GameViewModelDelegate {
     func onGameBoardChange(chessBoard: Array<Array<Int>>)
+    func gotWinner(mode: Int, x: Int, y: Int)
 }

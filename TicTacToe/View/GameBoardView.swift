@@ -13,6 +13,7 @@ class GameBoardView: UIView {
     private static let CHESS_LINE_WIDTH_FACTOR = CGFloat(8)
     private let backGroudColor = UIColor.black
     private let foreGroudColor = UIColor.white
+    private let winningColor = UIColor.red
     private var boardMatrix = Array(repeating: Array(repeating: 0, count: MATRIX_SIZE), count: MATRIX_SIZE)
 
     private var mode = -1
@@ -50,12 +51,16 @@ class GameBoardView: UIView {
                 }
             }
         }
-        context?.setStrokeColor(foreGroudColor.cgColor)
+        context?.setStrokeColor(winningColor.cgColor)
         context?.setLineWidth(getBoardLineWidth(rect: rect))
         switch mode {
         case 0:
+            context?.move(to: CGPoint(x: rect.minX, y: chessRectHeight*CGFloat(startY)+chessRectHeight/2))
+            context?.addLine(to: CGPoint(x: rect.maxX, y: chessRectHeight*CGFloat(startY)+chessRectHeight/2))
             break
         case 1:
+            context?.move(to: CGPoint(x: chessRectWidth*CGFloat(startX)+chessRectWidth/2, y: rect.minY))
+            context?.addLine(to: CGPoint(x: chessRectWidth*CGFloat(startX)+chessRectWidth/2, y: rect.maxY))
             break
         case 2:
             context?.move(to: CGPoint(x: rect.minX, y: rect.minY))

@@ -9,12 +9,14 @@
 import UIKit
 
 class GameViewModel {
+    private let WIN_THRESHOLD = 3
     private let chessSize: CGSize
     private let inset: CGFloat
     private var chessMatrix = Array<Array<CGRect>>()
     private var boardMatrix = Array(repeating: Array(repeating: 0, count: GameBoardView.MATRIX_SIZE), count: GameBoardView.MATRIX_SIZE)
     private let gameBoardDelegate: GameViewModelDelegate
     private var playerCircle = true
+    private var winner = 0
 
     required init(boardSize: CGSize, matrixSize: Int, delegate: GameViewModelDelegate) {
         gameBoardDelegate = delegate
@@ -30,6 +32,95 @@ class GameViewModel {
         }
     }
 
+    private func checkResult(x: Int, y: Int) {
+        let upperBound = GameBoardView.MATRIX_SIZE-1
+        let checkOffset = WIN_THRESHOLD-1
+        // Check row
+        let row = boardMatrix[y]
+        winner = checkWinner(candidate: row)
+        if winner != 0 {
+            return
+        }
+        var candidate = Array<Int>()
+        let startY = y-checkOffset < 0 ? 0 : y-checkOffset
+        let endY = y+checkOffset > upperBound ? upperBound : y+checkOffset
+        // Check column
+        for idx in startY...endY {
+            candidate.append(boardMatrix[idx][x])
+        }
+        winner = checkWinner(candidate: candidate)
+        if winner != 0 {
+            return
+        }
+        // Check diagonal
+        candidate.removeAll()
+        let minStart = min(x, y)
+        let start = minStart-checkOffset < 0 ? 0 : minStart-checkOffset
+        let end = minStart+checkOffset > upperBound ? upperBound : minStart+checkOffset
+        for idx in start...end {
+            candidate.append(boardMatrix[idx][idx])
+        }
+        winner = checkWinner(candidate: candidate)
+        if winner != 0 {
+            return
+        }
+        candidate.removeAll()
+        for idx in start...end {
+            candidate.append(boardMatrix[idx][end - idx])
+        }
+        winner = checkWinner(candidate: candidate)
+    }
+
+    private func checkWinner(candidate: Array<Int>) -> Int {
+        var winningPlayer = 0
+        var circle = 0
+        var cross = 0
+        var last = 0
+        for chess in candidate {
+            switch chess {
+            case 1:
+                if last == 1 {
+                    circle += 1
+                } else {
+                    circle = 1
+                }
+                last = 1
+                if circle >= WIN_THRESHOLD {
+                    winningPlayer = 1
+                }
+                break
+            case 2:
+                if last == 2 {
+                    cross += 1
+                } else {
+                    cross = 1
+                }
+                last = 2
+                if cross >= WIN_THRESHOLD {
+                    winningPlayer = 2
+                }
+            default:
+                circle = 0
+                cross = 0
+                last = 0
+                break
+            }
+            if circle >= WIN_THRESHOLD || cross >= WIN_THRESHOLD {
+                break
+            }
+        }
+        return winningPlayer
+    }
+
+    private func mayGotWinner() {
+        if winner != 0 {
+            boardMatrix = Array(repeating: Array(repeating: 0, count: GameBoardView.MATRIX_SIZE), count: GameBoardView.MATRIX_SIZE)
+            gameBoardDelegate.onGameBoardChange(chessBoard: boardMatrix)
+        }
+        print(winner)
+        winner = 0
+    }
+
     func tapHandler(location: CGPoint) {
         root:
         for (y, row) in chessMatrix.enumerated() {
@@ -43,9 +134,11 @@ class GameViewModel {
                         playerCircle = true
                     }
                     gameBoardDelegate.onGameBoardChange(chessBoard: boardMatrix)
+                    checkResult(x: x, y: y)
                     break root
                 }
             }
         }
+        mayGotWinner()
     }
 }

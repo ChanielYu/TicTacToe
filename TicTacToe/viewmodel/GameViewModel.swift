@@ -17,6 +17,8 @@ class GameViewModel {
     private let gameBoardDelegate: GameViewModelDelegate
     private var playerCircle = true
     private var winner = 0
+    private var startPos = 0
+    private var winningMode = 0 // 0->horizontal 1->vertical 2->slash 3->reverse slash
 
     required init(boardSize: CGSize, matrixSize: Int, delegate: GameViewModelDelegate) {
         gameBoardDelegate = delegate
@@ -37,7 +39,10 @@ class GameViewModel {
         let checkOffset = WIN_THRESHOLD-1
         // Check row
         let row = boardMatrix[y]
-        winner = checkWinner(candidate: row)
+        var result = checkWinner(candidate: row)
+        winner = result[0]
+        startPos = result[1]
+        winningMode = 0
         if winner != 0 {
             return
         }
@@ -48,7 +53,10 @@ class GameViewModel {
         for idx in startY...endY {
             candidate.append(boardMatrix[idx][x])
         }
-        winner = checkWinner(candidate: candidate)
+        result = checkWinner(candidate: candidate)
+        winner = result[0]
+        startPos = result[1]
+        winningMode = 1
         if winner != 0 {
             return
         }
@@ -60,7 +68,10 @@ class GameViewModel {
         for idx in start...end {
             candidate.append(boardMatrix[idx][idx])
         }
-        winner = checkWinner(candidate: candidate)
+        result = checkWinner(candidate: candidate)
+        winner = result[0]
+        startPos = result[1]
+        winningMode = 2
         if winner != 0 {
             return
         }
@@ -68,21 +79,26 @@ class GameViewModel {
         for idx in start...end {
             candidate.append(boardMatrix[idx][end - idx])
         }
-        winner = checkWinner(candidate: candidate)
+        result = checkWinner(candidate: candidate)
+        winner = result[0]
+        startPos = result[1]
+        winningMode = 3
     }
 
-    private func checkWinner(candidate: Array<Int>) -> Int {
+    private func checkWinner(candidate: Array<Int>) -> Array<Int> {
         var winningPlayer = 0
+        var pos = 0
         var circle = 0
         var cross = 0
         var last = 0
-        for chess in candidate {
+        for (idx, chess) in candidate.enumerated() {
             switch chess {
             case 1:
                 if last == 1 {
                     circle += 1
                 } else {
                     circle = 1
+                    pos = idx
                 }
                 last = 1
                 if circle >= WIN_THRESHOLD {
@@ -94,6 +110,7 @@ class GameViewModel {
                     cross += 1
                 } else {
                     cross = 1
+                    pos = idx
                 }
                 last = 2
                 if cross >= WIN_THRESHOLD {
@@ -109,15 +126,15 @@ class GameViewModel {
                 break
             }
         }
-        return winningPlayer
+        return [winningPlayer, pos]
     }
 
     private func mayGotWinner() {
         if winner != 0 {
             boardMatrix = Array(repeating: Array(repeating: 0, count: GameBoardView.MATRIX_SIZE), count: GameBoardView.MATRIX_SIZE)
             gameBoardDelegate.onGameBoardChange(chessBoard: boardMatrix)
+            print(winner, startPos, winningMode)
         }
-        print(winner)
         winner = 0
     }
 

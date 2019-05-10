@@ -19,6 +19,7 @@ class GameViewModel {
     private var winner = 0
     private var startPos = 0
     private var winningMode = 0 // 0->horizontal 1->vertical 2->slash 3->reverse slash
+    private var round = 0
 
     required init(boardSize: CGSize, matrixSize: Int, delegate: GameViewModelDelegate) {
         gameBoardDelegate = delegate
@@ -130,9 +131,10 @@ class GameViewModel {
     }
 
     private func mayGotWinner() {
-        if winner != 0 {
+        if winner != 0 || round >= GameBoardView.MATRIX_SIZE*GameBoardView.MATRIX_SIZE {
             boardMatrix = Array(repeating: Array(repeating: 0, count: GameBoardView.MATRIX_SIZE), count: GameBoardView.MATRIX_SIZE)
             gameBoardDelegate.onGameBoardChange(chessBoard: boardMatrix)
+            round = 0
             print(winner, startPos, winningMode)
         }
         winner = 0
@@ -152,6 +154,7 @@ class GameViewModel {
                     }
                     gameBoardDelegate.onGameBoardChange(chessBoard: boardMatrix)
                     checkResult(x: x, y: y)
+                    round+=1
                     break root
                 }
             }
